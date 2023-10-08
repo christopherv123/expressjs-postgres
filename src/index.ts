@@ -59,6 +59,32 @@ app.get('/ticket/:id', async (req, res) => {
   }
 });
 
+//get name
+app.get('/names', async (req, res) => {
+ try {
+    const allNames = await pool.query('SELECT * FROM name');
+    res.json(allNames.rows);
+  } catch (err) {
+    console.log('there is no name yet');
+  }
+});
+
+//Post name
+app.post('/name', async (req, res) => {
+  try {
+    const {
+      name
+    } = req.body;
+    const newName = await pool.query(
+      'INSERT INTO name (name) VALUES ($1) RETURNING * ',
+     [name]
+    );
+    res.json(newName.rows[0]);
+  } catch (err) {
+    console.log('failed to add Name');
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
