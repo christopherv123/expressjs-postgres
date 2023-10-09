@@ -70,14 +70,15 @@ app.get('/names', async (req, res) => {
 });
 
 //Post name
-app.post('/name', async (req, res) => {
+app.put('/name', async (req, res) => {
   try {
     const {
-      name
+      name,
+      email
     } = req.body;
     const newName = await pool.query(
-      'INSERT INTO name (name) VALUES ($1) RETURNING * ',
-     [name]
+      'INSERT INTO name (name, email) VALUES ($1,$2) RETURNING * ',
+     [name, email]
     );
     res.json(newName.rows[0]);
   } catch (err) {
